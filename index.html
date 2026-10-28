@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Raihan Ariiq Portfolio</title>
+    <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="./images/favicon.png?v=2"
+/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="wrap bar">
+        <a class="logo" href="#top" aria-label="Raihan Ariiq, home">
+          <img
+          src="images/logo.png"
+          alt="Raihan Ariiq Logo"
+          class="logo-img"/>
+        </a>
+        </a>
+        <button
+          class="burger"
+          id="bg"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+        <nav id="nav" aria-label="Main">
+          <a href="#work">Work</a><a href="#about">About</a
+          ><a href="#contact">Contact</a
+          ><a class="btn pri" href="#about" title="Add your resume link here"
+          >Resume</a>
+        </nav>
+      </div>
+    </header>
+
+    <div id="home">
+      <main id="top">
+        <div class="wrap hero">
+          <div class="hero-text">
+            <span class="eyebrow">Independent Designer · Indonesia</span>
+            <h1>Designing digital experiences with clarity and purpose.</h1>
+            <p>
+              I create thoughtful digital products, intuitive websites, and
+              visual experiences that connect people with ideas.
+            </p>
+            <div class="cta">
+              <a class="btn pri" href="#work">Explore My Work</a
+              ><a class="btn sec" href="#about">About Me</a>
+            </div>
+          </div>
+          <!-- HERO PHOTO: put your photo at images/profile.jpg -->
+          <figure class="hero-photo">
+            <span class="hero-initials" aria-hidden="true"></span>
+            <img
+              src="images/profile.jpg"
+              alt="Portrait of Raihan Ariiq"
+              width="480"
+              height="600"
+            />
+          </figure>
+          <div class="scroll" aria-hidden="true"><i></i>SCROLL</div>
+        </div>
+        <section id="work">
+          <div class="wrap">
+            <div class="sh">
+              <h2>Selected Projects</h2>
+              <span class="eyebrow">04 Projects</span>
+            </div>
+            <div class="grid" id="grid"></div>
+          </div>
+        </section>
+        <section id="about" class="reveal">
+          <div class="wrap about">
+            <div>
+              <span class="eyebrow">About</span>
+              <h2 style="margin-top: 16px">Designing with intention.</h2>
+              <p>
+                I’m Raihan Ariiq, a multidisciplinary designer interested in
+                creating digital products and visual experiences that balance
+                functionality, clarity, and aesthetics. My work spans UI/UX
+                design, web experiences, and visual communication.
+              </p>
+               <a
+               href="assets/resume.pdf"
+               target="_blank"
+               rel="noopener"
+               class="btn btn-view">
+                View Resume
+              </a>
+            </div>
+            <dl class="dl" style="margin: 0">
+              <div>
+                <dt>Design Focus</dt>
+                <dd>UI/UX Design<br />Web Design<br />Visual Design</dd>
+              </div>
+              <div>
+                <dt>Tools</dt>
+                <dd>Figma, HTML, CSS, JavaScript</dd>
+              </div>
+              <div>
+                <dt>Experience</dt>
+                <dd>
+                  Digital Marketing, PT Fixcar Automotive Indonesia<small>Agustus 2025 – Now.</small>
+                </dd>
+              </div>
+              <div>
+                <dt>Education</dt>
+                <dd>
+                  S1 Bisnis Digital, Telkom University Purwokerto<small
+                    >2022 – 2026</small
+                  >
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+        <section id="contact" class="reveal">
+          <div class="wrap contact">
+            <span class="eyebrow">Contact</span>
+            <h2 style="margin-top: 16px">Have a project in mind?</h2>
+            <p>
+              I’m open to creative collaborations, design opportunities, and
+              projects that challenge me to create meaningful digital
+              experiences.
+            </p>
+            <div class="links">
+              <a class="btn pri" href="mailto:raihanariiq1803@gmail.com"
+                >raihanariiq1803@gmail.com</a
+              ><a class="btn sec" href="https://www.linkedin.com/in/raihan-ariiq-38b535373/"
+                >LinkedIn</a
+              ><a class="btn sec" href="https://www.instagram.com/raihanarqq/=UCPD&PC=NMTS"
+                >Instagram</a
+              ><a class="btn sec" href="https://wa.me/6281282531406">WhatsApp</a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="case" hidden></div>
+
+    <footer>
+      <div class="wrap">
+        <div>
+          Designed and built by Raihan Ariiq.<br />© 2026 Raihan Ariiq. All
+          rights reserved.
+        </div>
+        <div class="s">
+          <a href="https://linkedin.com/in/your-profile">LinkedIn</a
+          ><a href="https://www.instagram.com/raihanarqq/=UCPD&PC=NMTS">Instagram</a
+          ><a href="https://wa.me/6281282531406">WhatsApp</a>
+          <a href="#top" id="up">Back to top ↑</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
