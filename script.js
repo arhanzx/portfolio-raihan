@@ -204,7 +204,7 @@ document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
                                (via PDF.js). Jika gagal, kartu menampilkan tulisan "PDF".
                                Opsional: isi "thumb" dengan gambar sendiri untuk menggantinya.
    "link" opsional: URL verifikasi kredensial. */
-const CERT_DIR = "images/certificates/";
+const CERT_DIR = "images/sertif/";
 const CERTS = [
   { name: "Certificate Digital Marketinng", issuer: "Badan Nasional Sertifikasi Profesi", year: "2026", file: "sertifikasidigital.pdf", link: "" },
   { name: "Certificate Technopreneurship", issuer: "Telkom University", year: "2026", file: "techno.pdf", link:""},
