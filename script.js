@@ -22,7 +22,7 @@ const M = {
   jobly: () =>
     `<div class="phones">${[0, 1, 2].map((n) => `<div class="ph"><s class="f"></s><s></s>${'<div class="j"><i></i><i></i><u></u></div>'.repeat(n == 2 ? 2 : 3)}</div>`).join("")}</div>`,
   maticspeedshop: () =>
-    `<div class="m"><div class="site"><div class="nv"><b></b><span></span></div><div class="hr"><i></i><i></i><u></u></div><div class="sv"><div></div><div></div><div></div></div><div class="mob"><i></i><i style="width:60%"></i><u></u><u style="border-top-color:#1d4ed8"></u></div></div></div>`,
+    `<div class="m"><div class="site"><div class="nv"><b></b><span></span></div><div class="hr"><i></i><i></i><u></u></div><div class="sv"><div></div><div></div><div></div></div><div class="mob"><i></i><i style="width:60%"></i><u></u><u style="border-top-color:#b08d57"></u></div></div></div>`,
   fixcar: () =>
     `<div class="ig">${["r", "w", "b", "b", "r", "w", "w", "b", "r"].map((c) => `<div class="${c}"><i></i><i></i></div>`).join("")}</div>`,
 };
@@ -196,3 +196,174 @@ document
   });
 }, { threshold: 0.15 });
 document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+/* 5. CERTIFICATES
+   Letakkan file di folder:  images/certificates/
+   - Gambar (jpg/png/webp)  -> tampil langsung sebagai thumbnail.
+   - PDF                    -> thumbnail dibuat OTOMATIS dari halaman pertama PDF
+                               (via PDF.js). Jika gagal, kartu menampilkan tulisan "PDF".
+                               Opsional: isi "thumb" dengan gambar sendiri untuk menggantinya.
+   "link" opsional: URL verifikasi kredensial. */
+const CERT_DIR = "images/certificates/";
+const CERTS = [
+  { name: "Certificate Digital Marketinng", issuer: "Badan Nasional Sertifikasi Profesi", year: "2026", file: "sertifikasidigital.pdf", link: "" },
+  { name: "Certificate Technopreneurship", issuer: "Telkom University", year: "2026", file: "techno.pdf", link:""},
+  { name: "Certificate Leadership", issuer: "Telkom University", year: "2026", file: "leadership.pdf", link:""},
+  { name: "Certificate English Profiency Test", issuer: "Telkom University", year: "2025", file: "eprt.pdf", link: ""},
+  { name: "Certificate UI/UX With Design Thinking", issuer: "Mandiri Entreprenuer Center", year: "2023", file: "Raihan Ariiq-1.pdf", link: "" },
+  { name: "Certificate PPKMB Fakultas Rekayasa Industri & Desain", issuer: "IT Telkom Purwokerto", year: "2023", file: "panitiafrid.pdf", link: "" },
+  { name: "CertificateLearning Cyber Security to Protecct Your Privacy", issuer: "BEM FIF IT Telkom Purwokerto", year:  "2022", file:  "cybersecurity.pdf", link:""},
+];
+const isPdf = (f) => /\.pdf$/i.test(f);
+$("#cert-count").textContent = String(CERTS.length).padStart(2, "0") + " Certificates";
+$("#certs").innerHTML = CERTS.map((c, i) => {
+  const pdf = isPdf(c.file);
+  const pic = pdf ? c.thumb : c.file;
+  return `<button class="cert" data-i="${i}" aria-label="View ${c.name}">
+      <div class="cert-thumb">
+        <span class="cert-ph" aria-hidden="true">${pdf ? "PDF" : "★"}</span>
+        ${pic ? `<img class="photo" src="${CERT_DIR}${pic}" alt="${c.name}" loading="lazy" onerror="this.remove()">` : ""}
+        ${pdf ? '<span class="cert-tag">PDF</span>' : ""}
+      </div>
+      <div class="cert-meta"><h3>${c.name}</h3><span>${c.issuer} · ${c.year}</span></div>
+    </button>`;
+}).join("");
+
+
+/* Thumbnail otomatis dari halaman pertama PDF (PDF.js dari CDN).
+   Catatan: hanya jalan saat website dibuka lewat http(s) / hosting,
+   bukan saat file index.html dibuka langsung dari folder (file://). */
+const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+let pdfjsReady;
+const loadPdfJs = () =>
+  pdfjsReady ||
+  (pdfjsReady = new Promise((ok, fail) => {
+    const s = document.createElement("script");
+    s.src = PDFJS + "pdf.min.js";
+    s.onload = () => {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js";
+      ok(pdfjsLib);
+    };
+    s.onerror = fail;
+    document.head.appendChild(s);
+  }));
+async function pdfThumb(card, c) {
+  try {
+    const lib = await loadPdfJs();
+    const doc = await lib.getDocument(CERT_DIR + c.file).promise;
+    const page = await doc.getPage(1);
+    const base = page.getViewport({ scale: 1 });
+    const vp = page.getViewport({ scale: 800 / base.width });
+    const cv = document.createElement("canvas");
+    cv.width = vp.width;
+    cv.height = vp.height;
+    await page.render({ canvasContext: cv.getContext("2d"), viewport: vp }).promise;
+    cv.className = "photo";
+    cv.style.objectFit = base.height > base.width ? "contain" : "cover";
+    cv.setAttribute("role", "img");
+    cv.setAttribute("aria-label", c.name);
+    card.querySelector(".cert-thumb").appendChild(cv);
+  } catch (err) {
+    /* gagal: biarkan badge "PDF" tampil */
+  }
+}
+(async () => {
+  const cards = document.querySelectorAll(".cert");
+  for (let i = 0; i < CERTS.length; i++) {
+    const c = CERTS[i];
+    if (isPdf(c.file) && !c.thumb) await pdfThumb(cards[i], c);
+  }
+})();
+
+const lb = $("#lb");
+/* Jendela pratinjau umum: dipakai sertifikat dan resume */
+function openDoc({ url, title, sub = "", link = "" }) {
+  const pdf = isPdf(url);
+  $("#lb-img").hidden = pdf;
+  $("#lb-pdf").hidden = !pdf;
+  if (pdf) $("#lb-pdf").src = url + "#toolbar=0&navpanes=0";
+  else {
+    $("#lb-img").src = url;
+    $("#lb-img").alt = title;
+  }
+  $("#lb-cap").innerHTML =
+    `<b>${title}</b>${sub ? "<br>" + sub : ""}` +
+    (pdf ? `<br><a href="${url}" target="_blank" rel="noopener">Open PDF in new tab ↗</a>` : "") +
+    (link ? `<br><a href="${link}" target="_blank" rel="noopener">Verify credential ↗</a>` : "");
+  lb.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+function openCert(i) {
+  const c = CERTS[i];
+  openDoc({ url: CERT_DIR + c.file, title: c.name, sub: `${c.issuer} · ${c.year}`, link: c.link });
+}
+function closeCert() {
+  lb.hidden = true;
+  $("#lb-img").removeAttribute("src");
+  $("#lb-pdf").removeAttribute("src");
+  document.body.style.overflow = "";
+}
+/* Resume: semua tombol/link dengan atribut data-resume membuka pratinjau */
+const RESUME_URL = "assets/resume.pdf";
+document.querySelectorAll("[data-resume]").forEach((a) =>
+  a.addEventListener("click", (e) => {
+    e.preventDefault();
+    $("#nav").classList.remove("open");
+    openDoc({ url: RESUME_URL, title: "Resume — Raihan Ariiq" });
+  }),
+);
+$("#certs").addEventListener("click", (e) => {
+  const b = e.target.closest(".cert");
+  if (b) openCert(+b.dataset.i);
+});
+lb.addEventListener("click", (e) => {
+  if (e.target === lb || e.target.closest("#lb-x")) closeCert();
+});
+addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !lb.hidden) closeCert();
+});
+
+
+/* 6. WORK EXPERIENCE
+   Tambah pengalaman baru dengan menyalin satu blok { ... } lalu menaruhnya
+   di ATAS daftar (urutan: terbaru dulu).
+   current: true -> titik di timeline diberi warna aksen. */
+const EXP = [
+  {
+    role: "Digital Marketing Intern",
+    company: "PT Fixcar Automotive Indonesia",
+    period: "August 2025 – November 2025",
+    current: true,
+    summary: "Supporting digital marketing and brand communication for an automotive service company.",
+    points: [
+      "Designed social media content and promotional visuals with a consistent brand identity",
+      "Planned and prepared content for digital marketing campaigns",
+      "Communicated offers and services clearly across digital channels",
+    ],
+  },
+  {
+    role: "Digital Marketing Full-Time",
+    company: "PT Fixcar Automotive Indonesia",
+    period: "Desember 2025 – Now ",
+    current: true,
+    summary: "Supporting digital marketing and brand communication for an automotive service company.",
+    points: [
+      "Designed social media content and promotional visuals with a consistent brand identity",
+      "Planned and prepared content for digital marketing campaigns",
+      "Communicated offers and services clearly across digital channels",
+    ],
+  },
+];
+$("#exp-count").textContent = String(EXP.length).padStart(2, "0") + (EXP.length > 1 ? " Roles" : " Role");
+$("#exp").innerHTML = EXP.map(
+  (x) =>
+    `<article class="exp-item${x.current ? " now" : ""}">
+      <div class="exp-when">${x.period}</div>
+      <div class="exp-body">
+        <h3>${x.role}</h3>
+        <div class="exp-co">${x.company}</div>
+        ${x.summary ? `<p>${x.summary}</p>` : ""}
+        ${x.points && x.points.length ? "<ul>" + x.points.map((p) => `<li>${p}</li>`).join("") + "</ul>" : ""}
+      </div>
+    </article>`,
+).join("");
