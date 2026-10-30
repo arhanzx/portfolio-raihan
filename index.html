@@ -30,7 +30,6 @@
           alt="Raihan Ariiq Logo"
           class="logo-img"/>
         </a>
-        </a>
         <button
           class="burger"
           id="bg"
@@ -41,8 +40,9 @@
         </button>
         <nav id="nav" aria-label="Main">
           <a href="#work">Work</a><a href="#about">About</a
+          ><a href="#certificates">Certificates</a
           ><a href="#contact">Contact</a
-          ><a class="btn pri" href="#about" title="Add your resume link here"
+          ><a class="btn pri" href="assets/resume.pdf" data-resume
           >Resume</a>
         </nav>
       </div>
@@ -75,15 +75,6 @@
           </figure>
           <div class="scroll" aria-hidden="true"><i></i>SCROLL</div>
         </div>
-        <section id="work">
-          <div class="wrap">
-            <div class="sh">
-              <h2>Selected Projects</h2>
-              <span class="eyebrow">04 Projects</span>
-            </div>
-            <div class="grid" id="grid"></div>
-          </div>
-        </section>
         <section id="about" class="reveal">
           <div class="wrap about">
             <div>
@@ -97,6 +88,7 @@
               </p>
                <a
                href="assets/resume.pdf"
+               data-resume
                target="_blank"
                rel="noopener"
                class="btn btn-view">
@@ -129,6 +121,33 @@
             </dl>
           </div>
         </section>
+        <section id="experience" class="reveal">
+          <div class="wrap">
+            <div class="sh">
+              <h2>Work Experience</h2>
+              <span class="eyebrow" id="exp-count"></span>
+            </div>
+            <div class="exp" id="exp"></div>
+          </div>
+        </section>
+          <section id="certificates" class="reveal">
+          <div class="wrap">
+            <div class="sh">
+              <h2>Certificates</h2>
+              <span class="eyebrow" id="cert-count"></span>
+            </div>
+            <div class="certs" id="certs"></div>
+          </div>
+        </section>
+        <section id="work">
+          <div class="wrap">
+            <div class="sh">
+              <h2>Selected Projects</h2>
+              <span class="eyebrow">04 Projects</span>
+            </div>
+            <div class="grid" id="grid"></div>
+          </div>
+        </section>
         <section id="contact" class="reveal">
           <div class="wrap contact">
             <span class="eyebrow">Contact</span>
@@ -143,7 +162,7 @@
                 >raihanariiq1803@gmail.com</a
               ><a class="btn sec" href="https://www.linkedin.com/in/raihan-ariiq-38b535373/"
                 >LinkedIn</a
-              ><a class="btn sec" href="https://www.instagram.com/raihanarqq?vrfl=MXV2YWwzdWhhdDBpbg=="
+              ><a class="btn sec" href="https://www.instagram.com/raihanarqq/=UCPD&PC=NMTS"
                 >Instagram</a
               ><a class="btn sec" href="https://wa.me/6281282531406">WhatsApp</a>
             </div>
@@ -154,6 +173,15 @@
 
     <div id="case" hidden></div>
 
+    <div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Certificate preview">
+      <button class="lb-x" id="lb-x" aria-label="Close">✕</button>
+      <figure>
+        <img id="lb-img" alt="" />
+        <iframe id="lb-pdf" title="PDF preview" hidden></iframe>
+        <figcaption id="lb-cap"></figcaption>
+      </figure>
+    </div>
+
     <footer>
       <div class="wrap">
         <div>
@@ -162,7 +190,7 @@
         </div>
         <div class="s">
           <a href="https://linkedin.com/in/your-profile">LinkedIn</a
-          ><a href="https://www.instagram.com/raihanarqq?vrfl=MXV2YWwzdWhhdDBpbg==">Instagram</a
+          ><a href="https://www.instagram.com/raihanarqq/=UCPD&PC=NMTS">Instagram</a
           ><a href="https://wa.me/6281282531406">WhatsApp</a>
           <a href="#top" id="up">Back to top ↑</a>
         </div>
