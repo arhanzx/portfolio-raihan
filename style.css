@@ -1130,3 +1130,15 @@ footer .s {
     gap: 10px;
   }
 }
+
+/* Project photos: frame size stays fixed, photo is never cropped */
+.thumb .photo,
+.cv .photo {
+  object-fit: contain;
+  object-position: center;
+  padding: 1.5%;
+  box-sizing: border-box;
+  border-radius: 0;
+  background: var(--soft); /* menutupi mockup placeholder di belakang foto */
+  filter: drop-shadow(0 6px 18px rgba(46, 21, 25, 0.18));
+}
