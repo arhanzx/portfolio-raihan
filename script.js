@@ -26,7 +26,38 @@ const M = {
   fixcar: () =>
     `<div class="ig">${["r", "w", "b", "b", "r", "w", "w", "b", "r"].map((c) => `<div class="${c}"><i></i><i></i></div>`).join("")}</div>`,
 };
-/* 3. PROJECT CONTENT - edit the text for each project here */
+/* 3. PROJECT CONTENT
+   ==========================================================
+   CARA MENAMBAH PROJECT BARU
+   1. Salin salah satu blok { ... } di bawah, taruh di dalam daftar P
+      (jangan lupa koma di antara blok).
+   2. Ganti isinya. Hanya  k, name, cat, t, d  yang wajib diisi.
+      Field lain boleh dihapus; bagian yang kosong otomatis tidak tampil
+      dan nomor bagian di halaman case study menyesuaikan sendiri.
+   3. Taruh gambar di folder:  images/<k>/cover.jpg
+                               images/<k>/wireframe.jpg
+                               images/<k>/final.jpg
+
+   Template (salin & isi):
+   {
+     k: "nama-unik",          // huruf kecil, tanpa spasi; dipakai di URL & nama folder
+                              // (jangan pakai: work, about, experience, certificates, contact, top)
+     name: "Nama Project",
+     cat: "Kategori · Jenis", // dipisah " · ", contoh "UI/UX Design · Mobile App"
+     t: "Judul singkat project",
+     d: "Satu-dua kalimat deskripsi.",
+     bg: "Latar belakang dan tantangan.",              // opsional
+     goals: ["Tujuan 1", "Tujuan 2"],                  // opsional
+     role: ["Peran 1", "Peran 2"],                     // opsional
+     process: ["Langkah 1", "Langkah 2", "Langkah 3"], // opsional (default: 4 langkah umum)
+     flow: ["Halaman 1", "Halaman 2"],                 // opsional (null = tampil "tidak berlaku")
+     wireframe: false,                                 // opsional: sembunyikan bagian wireframe
+     final: false,                                     // opsional: sembunyikan bagian final design
+     ref: "Refleksi dan langkah selanjutnya.",         // opsional
+     link: "https://...", linkLabel: "View live site", // opsional: tombol link eksternal
+   },
+   Nomor 01, 02, ... dibuat otomatis sesuai urutan.
+   ========================================================== */
 const P = [
   {
     k: 'karyaone',
@@ -125,30 +156,64 @@ const P = [
     flow: null,
     ref: "Moving forward, I aim to explore more creative layouts, develop templates for Stories and carousels, and maintain a consistent visual identity across different content formats.",
   },
+  {
+    k: "HaloPet",
+    n: "04",
+    name: "FixCar Automotive",
+    cat: "Visual Design · Social Media",
+    t: "Creating a Consistent Visual Identity",
+    d: "A collection of automotive social media designs focused on consistent branding, clear communication, and engaging promotional content.",
+    bg: "Promotional posts work better when they feel like one brand. This project builds a repeatable visual system in red, blue, and white.",
+    goals: [
+      "Keep branding consistent across posts",
+      "Communicate offers and services clearly",
+      "Create layouts that are easy to reuse",
+    ],
+    role: [
+      "Visual design",
+      "Layout and template system",
+      "Campaign content design",
+    ],
+    flow: null,
+    ref: "Moving forward, I aim to explore more creative layouts, develop templates for Stories and carousels, and maintain a consistent visual identity across different content formats.",
+  },
 ];
 /* 4. RENDERING + ROUTING */
 const $ = (s) => document.querySelector(s);
+const pad = (n) => String(n).padStart(2, "0");
+M.generic = M.maticspeedshop; // mockup bawaan untuk project baru tanpa mockup khusus
+const mock = (k) => (M[k] || M.generic)();
+$("#proj-count").textContent = pad(P.length) + (P.length > 1 ? " Projects" : " Project");
 $("#grid").innerHTML = P.map(
-  (p) =>
-    `<a class="card" href="#${p.k}"><div class="thumb">${M[p.k]()}${img(p.k, "cover", p.name)}</div><div class="meta"><span class="eyebrow">${p.n} · ${p.cat}</span><h3>${p.t}</h3><p>${p.d}</p><span class="lnk">View Case Study →</span></div></a>`,
+  (p, i) =>
+    `<a class="card" href="#${p.k}"><div class="thumb">${mock(p.k)}${img(p.k, "cover", p.name)}</div><div class="meta"><span class="eyebrow">${pad(i + 1)} · ${p.cat}</span><h3>${p.t}</h3><p>${p.d}</p><span class="lnk">View Case Study →</span></div></a>`,
 ).join("");
-const sec = (i, h, b, vis) =>
-  `<div class="cs"><h2><span>${i}</span>${h}</h2><div>${b}</div></div>`;
 function caseHTML(i) {
   const p = P[i],
     nx = P[(i + 1) % P.length],
-    ul = (a) => "<ul>" + a.map((x) => `<li>${x}</li>`).join("") + "</ul>";
-  return `<div class="wrap case"><a class="back" href="#work">← All projects</a><div style="margin-top:32px" class="eyebrow">${p.cat}</div><h1>${p.t}</h1><p class="lead">${p.d}</p>
-<div class="cv">${M[p.k]()}${img(p.k, "cover", p.name)}</div>
-${sec("01", "Project overview", `<p>${p.name} is a ${p.cat.split(" · ")[1].toLowerCase()} project within ${p.cat.split(" · ")[0]}. ${p.d}</p>`)}
-${sec("02", "Background and challenge", `<p>${p.bg}</p>`)}
-${sec("03", "Project goals", ul(p.goals))}
-${sec("04", "My role", ul(p.role))}
-${sec("05", "Design process", `<div class="steps"><div><b>01</b>Understand the problem</div><div><b>02</b>Structure and explore</div><div><b>03</b>Design and refine</div><div><b>04</b>Prototype and review</div></div>`)}
-${p.flow ? sec("06", "Information architecture", `<div class="flow">${p.flow.map((f) => `<span>${f}</span>`).join("<i>→</i>")}</div>`) : sec("06", "Information architecture", "<p>Not applicable for this project. The work centers on a reusable post system rather than a navigable product.</p>")}
-${sec("07", "Wireframes and explorations", `<div class="cv lofi">${M[p.k]()}${img(p.k, "wireframe", p.name + " wireframes")}</div>`)}
-${sec("08", "Final design and mockups", `<div class="cv">${M[p.k]()}${img(p.k, "final", p.name + " final design")}</div>`)}
-${sec("09", "Reflection and next steps", `<p>${p.ref}</p>`)}
+    ul = (a) => "<ul>" + a.map((x) => `<li>${x}</li>`).join("") + "</ul>",
+    parts = p.cat.split(" · "),
+    overview = parts[1]
+      ? `${p.name} is a ${parts[1].toLowerCase()} project within ${parts[0]}. ${p.d}`
+      : `${p.name} is a ${p.cat.toLowerCase()} project. ${p.d}`,
+    steps = p.process || ["Understand the problem", "Structure and explore", "Design and refine", "Prototype and review"],
+    S = [];
+  const add = (h, b) => b && S.push([h, b]);
+  add("Project overview", `<p>${overview}</p>`);
+  add("Background and challenge", p.bg && `<p>${p.bg}</p>`);
+  add("Project goals", p.goals && p.goals.length && ul(p.goals));
+  add("My role", p.role && p.role.length && ul(p.role));
+  add("Design process", `<div class="steps">${steps.map((s, n) => `<div><b>${pad(n + 1)}</b>${s}</div>`).join("")}</div>`);
+  if (p.flow) add("Information architecture", `<div class="flow">${p.flow.map((f) => `<span>${f}</span>`).join("<i>→</i>")}</div>`);
+  else if (p.flow === null) add("Information architecture", "<p>Not applicable for this project. The work centers on a reusable post system rather than a navigable product.</p>");
+  if (p.wireframe !== false) add("Wireframes and explorations", `<div class="cv lofi">${mock(p.k)}${img(p.k, "wireframe", p.name + " wireframes")}</div>`);
+  if (p.final !== false) add("Final design and mockups", `<div class="cv">${mock(p.k)}${img(p.k, "final", p.name + " final design")}</div>`);
+  add("Reflection and next steps", p.ref && `<p>${p.ref}</p>`);
+  const body = S.map(([h, b], n) => `<div class="cs"><h2><span>${pad(n + 1)}</span>${h}</h2><div>${b}</div></div>`).join("\n");
+  const cta = p.link ? `<p style="margin:24px 0 0"><a class="btn pri" href="${p.link}" target="_blank" rel="noopener">${p.linkLabel || "View project"} ↗</a></p>` : "";
+  return `<div class="wrap case"><a class="back" href="#work">← All projects</a><div style="margin-top:32px" class="eyebrow">${p.cat}</div><h1>${p.t}</h1><p class="lead">${p.d}</p>${cta}
+<div class="cv">${mock(p.k)}${img(p.k, "cover", p.name)}</div>
+${body}
 <div class="next"><a href="#work">← Back to work</a><a href="#${nx.k}">Next: ${nx.name} →</a></div></div>`;
 }
 function route() {
@@ -213,6 +278,7 @@ const CERTS = [
   { name: "Certificate UI/UX With Design Thinking", issuer: "Mandiri Entreprenuer Center", year: "2023", file: "Raihan Ariiq-1.pdf", link: "" },
   { name: "Certificate PPKMB Fakultas Rekayasa Industri & Desain", issuer: "IT Telkom Purwokerto", year: "2023", file: "panitiafrid.pdf", link: "" },
   { name: "CertificateLearning Cyber Security to Protecct Your Privacy", issuer: "BEM FIF IT Telkom Purwokerto", year:  "2022", file:  "cybersecurity.pdf", link:""},
+
 ];
 const isPdf = (f) => /\.pdf$/i.test(f);
 $("#cert-count").textContent = String(CERTS.length).padStart(2, "0") + " Certificates";
@@ -330,21 +396,9 @@ addEventListener("keydown", (e) => {
    current: true -> titik di timeline diberi warna aksen. */
 const EXP = [
   {
-    role: "Digital Marketing Intern",
+    role: "Digital Marketing",
     company: "PT Fixcar Automotive Indonesia",
-    period: "August 2025 – November 2025",
-    current: true,
-    summary: "Supporting digital marketing and brand communication for an automotive service company.",
-    points: [
-      "Designed social media content and promotional visuals with a consistent brand identity",
-      "Planned and prepared content for digital marketing campaigns",
-      "Communicated offers and services clearly across digital channels",
-    ],
-  },
-  {
-    role: "Digital Marketing Full-Time",
-    company: "PT Fixcar Automotive Indonesia",
-    period: "Desember 2025 – Now ",
+    period: "August 2025 – Present",
     current: true,
     summary: "Supporting digital marketing and brand communication for an automotive service company.",
     points: [
